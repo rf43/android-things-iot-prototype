@@ -1,3 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AndroidThingsIoT-LightBulbs</string>
+    <string name="client_header">Tap The Light Bulb To Toggle Its State</string>
+    <string name="android_things_header">Bad Ass Light Toggler</string>
+    <string name="red_light_desc">RED LIGHT</string>
+    <string name="green_light_desc">GREEN LIGHT</string>
+    <string name="blue_light_desc">BLUE LIGHT</string>
 </resources>

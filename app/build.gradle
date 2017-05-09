@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.firebase-crash'
 
 android {
     compileSdkVersion 25
@@ -17,13 +18,37 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+        androidthings {
+
+        }
+        mobileclient {
+
+        }
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    def VERSION_FIREBASE = '10.2.1'
+    compile("com.google.firebase:firebase-core:$VERSION_FIREBASE",
+            "com.google.firebase:firebase-database:$VERSION_FIREBASE",
+            "com.google.firebase:firebase-crash:$VERSION_FIREBASE")
+
+    testCompile 'junit:junit:4.12'
+
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
+
+    provided 'com.google.android.things:androidthings:0.2-devpreview'
+    compile 'com.android.support:design:25.3.1'
 }
+
+// Must be at the bottom of this file per Firebase
+// https://firebase.google.com/docs/android/setup
+apply plugin: 'com.google.gms.google-services'
