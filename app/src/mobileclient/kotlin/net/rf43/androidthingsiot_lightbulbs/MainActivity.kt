@@ -19,9 +19,6 @@ class MainActivity : BaseMainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_main)
-
-        initFirebaseRefs()
-        initUiElements()
     }
 
     override fun initUiElements() {

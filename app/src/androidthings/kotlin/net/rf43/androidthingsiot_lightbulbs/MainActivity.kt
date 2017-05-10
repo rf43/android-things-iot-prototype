@@ -26,9 +26,7 @@ class MainActivity : BaseMainActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_android_things_main)
 
-        initFirebaseRefs()
         initGpio()
-        initUiElements()
     }
 
     override fun onDestroy() {

@@ -1,5 +1,6 @@
 package net.rf43.androidthingsiot_lightbulbs
 
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import com.google.firebase.database.DatabaseReference
@@ -14,6 +15,12 @@ abstract class BaseMainActivity : AppCompatActivity() {
     lateinit var mRefLightRed: DatabaseReference
     lateinit var mRefLightGreen: DatabaseReference
     lateinit var mRefLightBlue: DatabaseReference
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initFirebaseRefs()
+        initUiElements()
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -45,7 +52,7 @@ abstract class BaseMainActivity : AppCompatActivity() {
         }
     }
 
-    fun initFirebaseRefs() {
+    private fun initFirebaseRefs() {
         val database = FirebaseDatabase.getInstance()
         val baseRef = database.reference.child(KEY_LIGHT_STATE)
 
