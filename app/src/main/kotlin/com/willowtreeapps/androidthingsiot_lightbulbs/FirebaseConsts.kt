@@ -1,4 +1,4 @@
-package net.rf43.androidthingsiot_lightbulbs
+package com.willowtreeapps.androidthingsiot_lightbulbs
 
 internal val KEY_LIGHT_STATE = "lightState"
 internal val KEY_STATE = "state"

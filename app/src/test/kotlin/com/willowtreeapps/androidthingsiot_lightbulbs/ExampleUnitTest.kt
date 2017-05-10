@@ -1,4 +1,4 @@
-package net.rf43.androidthingsiot_lightbulbs
+package com.willowtreeapps.androidthingsiot_lightbulbs
 
 import junit.framework.Assert.assertEquals
 import org.junit.Test
