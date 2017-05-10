@@ -1,6 +1,5 @@
 package net.rf43.androidthingsiot_lightbulbs
 
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import com.google.firebase.database.DatabaseReference
@@ -16,12 +15,6 @@ abstract class BaseMainActivity : AppCompatActivity() {
     lateinit var mRefLightGreen: DatabaseReference
     lateinit var mRefLightBlue: DatabaseReference
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initFirebaseRefs()
-        initUiElements()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         removeEventListeners()
@@ -31,6 +24,11 @@ abstract class BaseMainActivity : AppCompatActivity() {
         mRedLightImage = findViewById(R.id.image_view_red_light) as ImageView
         mGreenLightImage = findViewById(R.id.image_view_green_light) as ImageView
         mBlueLightImage = findViewById(R.id.image_view_blue_light) as ImageView
+    }
+
+    fun initActivity() {
+        initFirebaseRefs()
+        initUiElements()
     }
 
     fun bindViewData(which: String, state: Boolean) {

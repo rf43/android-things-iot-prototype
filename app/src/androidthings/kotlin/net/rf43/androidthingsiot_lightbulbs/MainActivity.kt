@@ -25,7 +25,7 @@ class MainActivity : BaseMainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_android_things_main)
-
+        initActivity()
         initGpio()
     }
 
