@@ -86,7 +86,7 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            val lightState = TextUtils.equals(VALUE_ON, dataSnapshot.getValue(String::class.java))
+            val lightState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
             bindViewData(KEY_LIGHT_RED, lightState)
             toggleGpioState(mLedGpio01, lightState)
         }
@@ -101,7 +101,7 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            val lightState = TextUtils.equals(VALUE_ON, dataSnapshot.getValue(String::class.java))
+            val lightState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
             bindViewData(KEY_LIGHT_GREEN, lightState)
             toggleGpioState(mLedGpio02, lightState)
         }
@@ -116,7 +116,7 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            val lightState = TextUtils.equals(VALUE_ON, dataSnapshot.getValue(String::class.java))
+            val lightState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
             bindViewData(KEY_LIGHT_BLUE, lightState)
             toggleGpioState(mLedGpio03, lightState)
         }

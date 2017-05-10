@@ -61,7 +61,7 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            mLightState01 = TextUtils.equals(VALUE_ON, dataSnapshot.getValue(String::class.java))
+            mLightState01 = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
             bindViewData(KEY_LIGHT_RED, mLightState01)
         }
 
@@ -75,7 +75,7 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            mLightState02 = TextUtils.equals(VALUE_ON, dataSnapshot.getValue(String::class.java))
+            mLightState02 = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
             bindViewData(KEY_LIGHT_GREEN, mLightState02)
         }
 
@@ -89,7 +89,7 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            mLightState03 = TextUtils.equals(VALUE_ON, dataSnapshot.getValue(String::class.java))
+            mLightState03 = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
             bindViewData(KEY_LIGHT_BLUE, mLightState03)
         }
 
