@@ -1,23 +1,16 @@
 package net.rf43.androidthingsiot_lightbulbs
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.util.Log
-import android.widget.ImageView
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseMainActivity() {
 
     private val TAG = MainActivity::class.java.simpleName
-
-    private lateinit var mRedLightImage: ImageView
-    private lateinit var mGreenLightImage: ImageView
-    private lateinit var mBlueLightImage: ImageView
-
-    private lateinit var mRefLightRed: DatabaseReference
-    private lateinit var mRefLightGreen: DatabaseReference
-    private lateinit var mRefLightBlue: DatabaseReference
 
     private var mLightState01: Boolean = false
     private var mLightState02: Boolean = false
@@ -31,28 +24,8 @@ class MainActivity : AppCompatActivity() {
         initUiElements()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mRefLightRed.removeEventListener(mRedLightEventListener)
-        mRefLightGreen.removeEventListener(mBlueLightEventListener)
-        mRefLightBlue.removeEventListener(mGreenLightEventListener)
-    }
-
-    private fun initFirebaseRefs() {
-        val database = FirebaseDatabase.getInstance()
-        val baseRef = database.reference.child(KEY_LIGHT_STATE)
-
-        mRefLightRed = baseRef.child(KEY_LIGHT_RED).child(KEY_STATE)
-        mRefLightGreen = baseRef.child(KEY_LIGHT_GREEN).child(KEY_STATE)
-        mRefLightBlue = baseRef.child(KEY_LIGHT_BLUE).child(KEY_STATE)
-
-        initEventListeners()
-    }
-
-    private fun initUiElements() {
-        mRedLightImage = findViewById(R.id.image_view_red_light) as ImageView
-        mGreenLightImage = findViewById(R.id.image_view_green_light) as ImageView
-        mBlueLightImage = findViewById(R.id.image_view_blue_light) as ImageView
+    override fun initUiElements() {
+        super.initUiElements()
 
         val containerRedLight = findViewById(R.id.wrapper_red_light)
         containerRedLight.setOnClickListener {
@@ -68,33 +41,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initEventListeners() {
+    override fun initEventListeners() {
         mRefLightRed.addValueEventListener(mRedLightEventListener)
         mRefLightGreen.addValueEventListener(mGreenLightEventListener)
         mRefLightBlue.addValueEventListener(mBlueLightEventListener)
     }
 
-    private fun toggleLightState(databaseReference: DatabaseReference, state: Boolean) {
-        databaseReference.setValue(if (state) VALUE_OFF else VALUE_ON)
+    override fun removeEventListeners() {
+        mRefLightRed.removeEventListener(mRedLightEventListener)
+        mRefLightGreen.removeEventListener(mBlueLightEventListener)
+        mRefLightBlue.removeEventListener(mGreenLightEventListener)
     }
 
-    private fun bindViewData(which: String, state: Boolean) {
-        var imgResId = R.drawable.grey_lt_bulb
-
-        when (which) {
-            KEY_LIGHT_RED -> {
-                if (state) imgResId = R.drawable.red_lt_bulb
-                mRedLightImage.setImageDrawable(getDrawable(imgResId))
-            }
-            KEY_LIGHT_GREEN -> {
-                if (state) imgResId = R.drawable.grn_lt_bulb
-                mGreenLightImage.setImageDrawable(getDrawable(imgResId))
-            }
-            KEY_LIGHT_BLUE -> {
-                if (state) imgResId = R.drawable.blue_lt_bulb
-                mBlueLightImage.setImageDrawable(getDrawable(imgResId))
-            }
-        }
+    private fun toggleLightState(databaseReference: DatabaseReference, state: Boolean) {
+        databaseReference.setValue(if (state) VALUE_OFF else VALUE_ON)
     }
 
     // Event Listeners
