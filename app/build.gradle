@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.firebase.firebase-crash'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
@@ -26,6 +28,12 @@ android {
 
         }
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        androidthings.java.srcDirs += 'src/androidthings/kotlin'
+        mobileclient.java.srcDirs += 'src/mobileclient/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
 }
 
 dependencies {
@@ -34,12 +42,18 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
+    compile("org.jetbrains.kotlin:kotlin-stdlib:$VERSION_KOTLIN",
+            "org.jetbrains.kotlin:kotlin-annotation-processing:$VERSION_KOTLIN")
+
     def VERSION_FIREBASE = '10.2.1'
     compile("com.google.firebase:firebase-core:$VERSION_FIREBASE",
             "com.google.firebase:firebase-database:$VERSION_FIREBASE",
             "com.google.firebase:firebase-crash:$VERSION_FIREBASE")
 
     testCompile 'junit:junit:4.12'
+
+    testCompile("org.jetbrains.kotlin:kotlin-test:$VERSION_KOTLIN",
+            "org.jetbrains.kotlin:kotlin-test-junit:$VERSION_KOTLIN")
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
