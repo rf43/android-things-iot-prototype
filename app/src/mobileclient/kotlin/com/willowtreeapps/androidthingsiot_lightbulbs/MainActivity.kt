@@ -1,4 +1,4 @@
-package net.rf43.androidthingsiot_lightbulbs
+package com.willowtreeapps.androidthingsiot_lightbulbs
 
 import android.os.Bundle
 import android.text.TextUtils
