@@ -86,9 +86,9 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            val lightState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
-            bindViewData(KEY_LIGHT_RED, lightState)
-            toggleGpioState(mLedGpio01, lightState)
+            mLightBulbState.redBulbState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
+            bindViewData(mLightBulbState)
+            toggleGpioState(mLedGpio01, mLightBulbState.redBulbState)
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
@@ -101,9 +101,9 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            val lightState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
-            bindViewData(KEY_LIGHT_GREEN, lightState)
-            toggleGpioState(mLedGpio02, lightState)
+            mLightBulbState.greenBulbState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
+            bindViewData(mLightBulbState)
+            toggleGpioState(mLedGpio02, mLightBulbState.greenBulbState)
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
@@ -116,9 +116,9 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            val lightState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
-            bindViewData(KEY_LIGHT_BLUE, lightState)
-            toggleGpioState(mLedGpio03, lightState)
+            mLightBulbState.blueBulbState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
+            bindViewData(mLightBulbState)
+            toggleGpioState(mLedGpio03, mLightBulbState.blueBulbState)
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
