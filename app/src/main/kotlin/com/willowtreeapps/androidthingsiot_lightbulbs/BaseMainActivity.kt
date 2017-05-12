@@ -15,6 +15,8 @@ abstract class BaseMainActivity : AppCompatActivity() {
     lateinit var mRefLightGreen: DatabaseReference
     lateinit var mRefLightBlue: DatabaseReference
 
+    protected val mLightBulbState: LightBulbState = LightBulbState()
+
     override fun onDestroy() {
         super.onDestroy()
         removeEventListeners()
@@ -31,23 +33,24 @@ abstract class BaseMainActivity : AppCompatActivity() {
         initUiElements()
     }
 
-    fun bindViewData(which: String, state: Boolean) {
-        var imgResId = R.drawable.grey_lt_bulb
+    fun bindViewData(state: LightBulbState) {
+        val greyBulb = R.drawable.grey_lt_bulb
 
-        when (which) {
-            KEY_LIGHT_RED -> {
-                if (state) imgResId = R.drawable.red_lt_bulb
-                mRedLightImage.setImageDrawable(getDrawable(imgResId))
-            }
-            KEY_LIGHT_GREEN -> {
-                if (state) imgResId = R.drawable.grn_lt_bulb
-                mGreenLightImage.setImageDrawable(getDrawable(imgResId))
-            }
-            KEY_LIGHT_BLUE -> {
-                if (state) imgResId = R.drawable.blue_lt_bulb
-                mBlueLightImage.setImageDrawable(getDrawable(imgResId))
-            }
-        }
+        mRedLightImage.setImageDrawable(
+                getDrawable(
+                        if (state.redBulbState) R.drawable.red_lt_bulb else greyBulb
+                )
+        )
+        mGreenLightImage.setImageDrawable(
+                getDrawable(
+                        if (state.greenBulbState) R.drawable.grn_lt_bulb else greyBulb
+                )
+        )
+        mBlueLightImage.setImageDrawable(
+                getDrawable(
+                        if (state.blueBulbState) R.drawable.blue_lt_bulb else greyBulb
+                )
+        )
     }
 
     private fun initFirebaseRefs() {

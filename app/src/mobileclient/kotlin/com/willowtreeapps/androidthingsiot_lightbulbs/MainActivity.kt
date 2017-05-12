@@ -12,10 +12,6 @@ class MainActivity : BaseMainActivity() {
 
     private val TAG = MainActivity::class.java.simpleName
 
-    private var mLightState01: Boolean = false
-    private var mLightState02: Boolean = false
-    private var mLightState03: Boolean = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_main)
@@ -27,15 +23,15 @@ class MainActivity : BaseMainActivity() {
 
         val containerRedLight = findViewById(R.id.wrapper_red_light)
         containerRedLight.setOnClickListener {
-            mRefLightRed.let { it1 -> toggleLightState(it1, mLightState01) }
+            mRefLightRed.let { ref -> toggleLightState(ref, mLightBulbState.redBulbState) }
         }
         val containerGreenLight = findViewById(R.id.wrapper_green_light)
         containerGreenLight.setOnClickListener {
-            mRefLightGreen.let { it1 -> toggleLightState(it1, mLightState02) }
+            mRefLightGreen.let { ref -> toggleLightState(ref, mLightBulbState.greenBulbState) }
         }
         val containerBlueLight = findViewById(R.id.wrapper_blue_light)
         containerBlueLight.setOnClickListener {
-            mRefLightBlue.let { it1 -> toggleLightState(it1, mLightState03) }
+            mRefLightBlue.let { ref -> toggleLightState(ref, mLightBulbState.blueBulbState) }
         }
     }
 
@@ -61,8 +57,8 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            mLightState01 = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
-            bindViewData(KEY_LIGHT_RED, mLightState01)
+            mLightBulbState.redBulbState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
+            bindViewData(mLightBulbState)
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
@@ -75,8 +71,8 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            mLightState02 = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
-            bindViewData(KEY_LIGHT_GREEN, mLightState02)
+            mLightBulbState.greenBulbState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
+            bindViewData(mLightBulbState)
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
@@ -89,8 +85,11 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            mLightState03 = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
-            bindViewData(KEY_LIGHT_BLUE, mLightState03)
+            mLightBulbState.blueBulbState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
+            bindViewData(mLightBulbState)
+
+//            mLightState03 = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
+//            bindViewData(KEY_LIGHT_BLUE, mLightState03)
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
