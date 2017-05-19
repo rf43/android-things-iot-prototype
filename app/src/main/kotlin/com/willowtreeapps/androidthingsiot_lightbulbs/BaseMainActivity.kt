@@ -1,25 +1,32 @@
 package com.willowtreeapps.androidthingsiot_lightbulbs
 
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.ImageView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 
 abstract class BaseMainActivity : AppCompatActivity() {
+
+    private val TAG = BaseMainActivity::class.java.simpleName
 
     lateinit var mRedLightImage: ImageView
     lateinit var mGreenLightImage: ImageView
     lateinit var mBlueLightImage: ImageView
 
+    lateinit var mRefBaseState: DatabaseReference
     lateinit var mRefLightRed: DatabaseReference
     lateinit var mRefLightGreen: DatabaseReference
     lateinit var mRefLightBlue: DatabaseReference
 
-    protected val mLightBulbState: LightBulbState = LightBulbState()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initFirebaseRefs()
+    }
 
     override fun onDestroy() {
         super.onDestroy()
-        removeEventListeners()
+        mRefBaseState.removeEventListener(baseRefValueListener)
     }
 
     open fun initUiElements() {
@@ -28,12 +35,45 @@ abstract class BaseMainActivity : AppCompatActivity() {
         mBlueLightImage = findViewById(R.id.image_view_blue_light) as ImageView
     }
 
-    fun initActivity() {
-        initFirebaseRefs()
-        initUiElements()
+    private fun initFirebaseRefs() {
+        val database = FirebaseDatabase.getInstance()
+
+        mRefBaseState = database.reference.child(KEY_LIGHT_STATE)
+        mRefBaseState.addValueEventListener(baseRefValueListener)
+
+        mRefLightRed = mRefBaseState.child(KEY_LIGHT_RED).child(KEY_STATE)
+        mRefLightGreen = mRefBaseState.child(KEY_LIGHT_GREEN).child(KEY_STATE)
+        mRefLightBlue = mRefBaseState.child(KEY_LIGHT_BLUE).child(KEY_STATE)
     }
 
-    fun bindViewData(state: LightBulbState) {
+    private val baseRefValueListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot?) {
+            val state = LightBulbState()
+
+            dataSnapshot?.children?.forEach({
+                        val dv = it.value as Map<*, *>
+                        when(it.key) {
+                            KEY_LIGHT_RED ->
+                                state.redBulbState = dv[KEY_STATE] != VALUE_OFF
+
+                            KEY_LIGHT_GREEN ->
+                                state.greenBulbState = dv[KEY_STATE] != VALUE_OFF
+
+                            KEY_LIGHT_BLUE ->
+                                state.blueBulbState = dv[KEY_STATE] != VALUE_OFF
+                        }
+                    })
+
+            bindViewData(state)
+        }
+
+        override fun onCancelled(databaseError: DatabaseError?) {
+            // Failed to read value
+            Log.w(TAG, "Failed to read value.", databaseError?.toException())
+        }
+    }
+
+    private fun bindViewData(state: LightBulbState) {
         val greyBulb = R.drawable.grey_lt_bulb
 
         mRedLightImage.setImageDrawable(
@@ -52,18 +92,4 @@ abstract class BaseMainActivity : AppCompatActivity() {
                 )
         )
     }
-
-    private fun initFirebaseRefs() {
-        val database = FirebaseDatabase.getInstance()
-        val baseRef = database.reference.child(KEY_LIGHT_STATE)
-
-        mRefLightRed = baseRef.child(KEY_LIGHT_RED).child(KEY_STATE)
-        mRefLightGreen = baseRef.child(KEY_LIGHT_GREEN).child(KEY_STATE)
-        mRefLightBlue = baseRef.child(KEY_LIGHT_BLUE).child(KEY_STATE)
-
-        initEventListeners()
-    }
-
-    abstract fun initEventListeners()
-    abstract fun removeEventListeners()
 }
