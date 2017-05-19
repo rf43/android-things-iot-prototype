@@ -29,12 +29,23 @@ abstract class BaseMainActivity : AppCompatActivity() {
         mRefBaseState.removeEventListener(baseRefValueListener)
     }
 
+    /**
+     * Initializes the UI ImageViews
+     */
     open fun initUiElements() {
         mRedLightImage = findViewById(R.id.image_view_red_light) as ImageView
         mGreenLightImage = findViewById(R.id.image_view_green_light) as ImageView
         mBlueLightImage = findViewById(R.id.image_view_blue_light) as ImageView
     }
 
+    /**
+     * Initializes the Firebase references
+     *
+     * Here we initialize the base ref which we will use by adding a value event listener
+     * to listen for any changes to the children in the realtime database.
+     * We also initialize the red, green, and blue light references so that we can access
+     * and use them later in our click listener callbacks
+     */
     private fun initFirebaseRefs() {
         val database = FirebaseDatabase.getInstance()
 
@@ -46,23 +57,27 @@ abstract class BaseMainActivity : AppCompatActivity() {
         mRefLightBlue = mRefBaseState.child(KEY_LIGHT_BLUE).child(KEY_STATE)
     }
 
+    /**
+     * The base database reference which will contain all the children that we will iterate
+     * through and get their state values.
+     */
     private val baseRefValueListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot?) {
             val state = LightBulbState()
 
             dataSnapshot?.children?.forEach({
-                        val dv = it.value as Map<*, *>
-                        when(it.key) {
-                            KEY_LIGHT_RED ->
-                                state.redBulbState = dv[KEY_STATE] != VALUE_OFF
+                val dv = it.value as Map<*, *>
+                when (it.key) {
+                    KEY_LIGHT_RED ->
+                        state.redBulbState = dv[KEY_STATE] != VALUE_OFF
 
-                            KEY_LIGHT_GREEN ->
-                                state.greenBulbState = dv[KEY_STATE] != VALUE_OFF
+                    KEY_LIGHT_GREEN ->
+                        state.greenBulbState = dv[KEY_STATE] != VALUE_OFF
 
-                            KEY_LIGHT_BLUE ->
-                                state.blueBulbState = dv[KEY_STATE] != VALUE_OFF
-                        }
-                    })
+                    KEY_LIGHT_BLUE ->
+                        state.blueBulbState = dv[KEY_STATE] != VALUE_OFF
+                }
+            })
 
             bindViewData(state)
         }
@@ -73,6 +88,10 @@ abstract class BaseMainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Binds the light states to the corresponding views so that we can toggle their
+     * on/off state accordingly
+     */
     private fun bindViewData(state: LightBulbState) {
         val greyBulb = R.drawable.grey_lt_bulb
 

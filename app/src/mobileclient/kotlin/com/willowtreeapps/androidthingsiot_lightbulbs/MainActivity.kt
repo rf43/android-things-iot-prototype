@@ -17,6 +17,9 @@ class MainActivity : BaseMainActivity() {
         initUiElements()
     }
 
+    /**
+     * Initialize the click listener callbacks
+     */
     override fun initUiElements() {
         super.initUiElements()
 
@@ -34,6 +37,11 @@ class MainActivity : BaseMainActivity() {
         }
     }
 
+    /**
+     * Convenience method that we can pass a database reference into and bind a
+     * single, one-time, ValueEventListener to. When this is called, it will
+     * automatically set the value in the database to the appropriate value.
+     */
     private fun addSingleEventListener(databaseReference: DatabaseReference) {
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
