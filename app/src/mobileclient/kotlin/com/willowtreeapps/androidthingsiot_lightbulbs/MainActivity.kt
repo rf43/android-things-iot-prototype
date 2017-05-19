@@ -23,16 +23,13 @@ class MainActivity : BaseMainActivity() {
     override fun initUiElements() {
         super.initUiElements()
 
-        val containerRedLight = findViewById(R.id.wrapper_red_light)
-        containerRedLight.setOnClickListener {
+        findViewById(R.id.wrapper_red_light).setOnClickListener {
             addSingleEventListener(mRefLightRed)
         }
-        val containerGreenLight = findViewById(R.id.wrapper_green_light)
-        containerGreenLight.setOnClickListener {
+        findViewById(R.id.wrapper_green_light).setOnClickListener {
             addSingleEventListener(mRefLightGreen)
         }
-        val containerBlueLight = findViewById(R.id.wrapper_blue_light)
-        containerBlueLight.setOnClickListener {
+        findViewById(R.id.wrapper_blue_light).setOnClickListener {
             addSingleEventListener(mRefLightBlue)
         }
     }
