@@ -1,7 +1,6 @@
 package com.willowtreeapps.androidthingsiot_lightbulbs
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import com.google.android.things.pio.Gpio
 import com.google.android.things.pio.PeripheralManagerService
@@ -25,12 +24,14 @@ class MainActivity : BaseMainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_android_things_main)
-        initActivity()
+        initUiElements()
+        initEventListeners()
         initGpio()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        removeEventListeners()
 
         // Close the Gpio pin.
         Log.i(TAG, "Closing LED GPIO pin")
@@ -43,13 +44,13 @@ class MainActivity : BaseMainActivity() {
         }
     }
 
-    override fun initEventListeners() {
+    private fun initEventListeners() {
         mRefLightRed.addValueEventListener(mRedLightEventListener)
         mRefLightGreen.addValueEventListener(mGreenLightEventListener)
         mRefLightBlue.addValueEventListener(mBlueLightEventListener)
     }
 
-    override fun removeEventListeners() {
+    private fun removeEventListeners() {
         mRefLightRed.removeEventListener(mRedLightEventListener)
         mRefLightGreen.removeEventListener(mBlueLightEventListener)
         mRefLightBlue.removeEventListener(mGreenLightEventListener)
@@ -86,9 +87,7 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            mLightBulbState.redBulbState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
-            bindViewData(mLightBulbState)
-            toggleGpioState(mLedGpio01, mLightBulbState.redBulbState)
+            toggleGpioState(mLedGpio01, dataSnapshot.value != VALUE_OFF)
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
@@ -101,9 +100,7 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            mLightBulbState.greenBulbState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
-            bindViewData(mLightBulbState)
-            toggleGpioState(mLedGpio02, mLightBulbState.greenBulbState)
+            toggleGpioState(mLedGpio02, dataSnapshot.value != VALUE_OFF)
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
@@ -116,9 +113,7 @@ class MainActivity : BaseMainActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            mLightBulbState.blueBulbState = TextUtils.equals(VALUE_ON, dataSnapshot.value as CharSequence?)
-            bindViewData(mLightBulbState)
-            toggleGpioState(mLedGpio03, mLightBulbState.blueBulbState)
+            toggleGpioState(mLedGpio03, dataSnapshot.value != VALUE_OFF)
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
